@@ -1,0 +1,3435 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumi V4 — Victorian Study Manor</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100%;
+    font-family: Georgia, "Times New Roman", serif;
+    background:
+        radial-gradient(circle at top left, rgba(170, 126, 75, 0.12), transparent 30%),
+        linear-gradient(135deg, #241b22, #3b2930 45%, #17151b);
+    color: #f4e8d2;
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid #d9ae67;
+    outline-offset: 2px;
+}
+
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* الشريط الجانبي */
+
+.sidebar {
+    width: 270px;
+    flex-shrink: 0;
+    min-height: 100vh;
+    padding: 22px 16px;
+    background:
+        linear-gradient(rgba(32, 22, 29, 0.94), rgba(32, 22, 29, 0.97)),
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 8px,
+            rgba(216, 174, 103, 0.035) 9px,
+            transparent 10px
+        );
+    border-left: 1px solid #8e683f;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+}
+
+.brand {
+    text-align: center;
+    padding: 8px 4px 22px;
+}
+
+.brand-ornament {
+    color: #d9ae67;
+    font-size: 22px;
+    letter-spacing: 6px;
+}
+
+.brand h1 {
+    margin: 8px 0 4px;
+    color: #e4bd78;
+    font-size: 27px;
+    letter-spacing: 2px;
+}
+
+.brand p {
+    margin: 0;
+    color: #c8ae91;
+    font-size: 12px;
+}
+
+.profile-card {
+    padding: 15px;
+    margin-bottom: 18px;
+    text-align: center;
+    background: rgba(121, 76, 65, 0.22);
+    border: 1px solid #76543c;
+    border-radius: 8px;
+}
+
+.avatar-circle {
+    width: 62px;
+    height: 62px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #d9ae67;
+    border-radius: 50%;
+    background: #3b2930;
+    font-size: 31px;
+}
+
+.profile-card strong {
+    display: block;
+    margin-top: 9px;
+    color: #f1d7a5;
+}
+
+.profile-card small {
+    color: #bda58b;
+}
+
+.nav-title {
+    margin: 18px 10px 7px;
+    color: #a88b6b;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.nav-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0;
+    padding: 11px 13px;
+    color: #e8d9c1;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    text-align: right;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.nav-button:hover {
+    color: #fff0cb;
+    background: rgba(217, 174, 103, 0.12);
+    border-color: #76543c;
+}
+
+.nav-button.active {
+    color: #fff2ce;
+    background: linear-gradient(90deg, rgba(141, 67, 61, 0.55), rgba(217, 174, 103, 0.14));
+    border-color: #a77a4a;
+    box-shadow: inset 3px 0 0 #d9ae67;
+}
+
+.nav-icon {
+    width: 23px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.sidebar-footer {
+    margin-top: 25px;
+    padding: 13px;
+    color: #a88b6b;
+    border-top: 1px solid #5b4436;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+/* المحتوى */
+
+.main-area {
+    flex: 1;
+    min-width: 0;
+    padding: 25px;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 17px;
+    border-bottom: 1px solid #76543c;
+}
+
+.topbar h2 {
+    margin: 0;
+    color: #f0d19a;
+    font-size: 25px;
+}
+
+.topbar p {
+    margin: 5px 0 0;
+    color: #bda58b;
+    font-size: 13px;
+}
+
+.topbar-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.icon-button {
+    min-width: 42px;
+    min-height: 38px;
+    color: #f0d19a;
+    background: #34252d;
+    border: 1px solid #76543c;
+    border-radius: 6px;
+    font-size: 18px;
+}
+
+.icon-button:hover {
+    background: #4a3034;
+}
+
+/* الصفحات */
+
+.page {
+    display: none;
+    animation: appear 0.25s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* البطاقات */
+
+.page-heading {
+    margin-bottom: 20px;
+}
+
+.page-heading h3 {
+    margin: 0 0 6px;
+    color: #efd09b;
+    font-size: 22px;
+}
+
+.page-heading p {
+    margin: 0;
+    color: #bda58b;
+    font-size: 13px;
+}
+
+.ornament-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0;
+    color: #b88a51;
+}
+
+.ornament-line:before,
+.ornament-line:after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: #76543c;
+}
+
+.card {
+    padding: 20px;
+    background:
+        linear-gradient(rgba(65, 43, 43, 0.88), rgba(49, 35, 40, 0.94)),
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 5px,
+            rgba(255, 255, 255, 0.012) 6px
+        );
+    border: 1px solid #76543c;
+    border-radius: 8px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.card-title h4 {
+    margin: 0;
+    color: #e8c486;
+    font-size: 17px;
+}
+
+.card-title span {
+    color: #a88b6b;
+    font-size: 12px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    padding: 17px;
+    background: #33242d;
+    border: 1px solid #76543c;
+    border-radius: 8px;
+}
+
+.stat-icon {
+    font-size: 23px;
+}
+
+.stat-number {
+    margin-top: 8px;
+    color: #f0d19a;
+    font-size: 27px;
+    font-weight: bold;
+}
+
+.stat-label {
+    margin-top: 4px;
+    color: #bda58b;
+    font-size: 12px;
+}
+
+.two-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: 18px;
+}
+
+.three-columns {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+/* الأزرار */
+
+.primary-button,
+.secondary-button,
+.danger-button {
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.primary-button {
+    color: #281d20;
+    background: #d9ae67;
+    border-color: #e5c382;
+}
+
+.primary-button:hover {
+    background: #edc987;
+}
+
+.secondary-button {
+    color: #f0d19a;
+    background: transparent;
+    border-color: #8e683f;
+}
+
+.secondary-button:hover {
+    background: rgba(217, 174, 103, 0.12);
+}
+
+.danger-button {
+    color: #f4c1b7;
+    background: transparent;
+    border-color: #9b5149;
+}
+
+.small-button {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+/* النماذج */
+
+.form-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.form-row > * {
+    flex: 1;
+    min-width: 130px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    color: #c8ae91;
+    font-size: 12px;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 11px 12px;
+    color: #f4e8d2;
+    background: #251c23;
+    border: 1px solid #76543c;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+select option {
+    background: #2b2027;
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+/* القوائم */
+
+.empty-state {
+    padding: 28px 15px;
+    color: #a88b6b;
+    text-align: center;
+    border: 1px dashed #76543c;
+    border-radius: 6px;
+    line-height: 1.9;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(118, 84, 60, 0.5);
+}
+
+.list-item:last-child {
+    border-bottom: 0;
+}
+
+.list-main {
+    min-width: 0;
+    flex: 1;
+}
+
+.list-main strong {
+    display: block;
+    color: #ead0a1;
+    font-size: 14px;
+}
+
+.list-main small {
+    display: block;
+    margin-top: 4px;
+    color: #a88b6b;
+    font-size: 11px;
+}
+
+.list-actions {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    color: #f3d49c;
+    background: rgba(180, 132, 71, 0.18);
+    border: 1px solid #76543c;
+    border-radius: 20px;
+    font-size: 11px;
+}
+
+.progress-bar {
+    height: 8px;
+    overflow: hidden;
+    background: #21191f;
+    border: 1px solid #5b4436;
+    border-radius: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #9b5149, #d9ae67);
+    transition: width 0.3s;
+}
+
+/* الصفحة الرئيسية */
+
+.welcome-banner {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+    padding: 27px;
+    background:
+        linear-gradient(110deg, rgba(122, 57, 56, 0.7), rgba(56, 39, 43, 0.92)),
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 12px,
+            rgba(217, 174, 103, 0.035) 13px
+        );
+    border: 1px solid #9b7046;
+    border-radius: 9px;
+}
+
+.welcome-banner:after {
+    content: "✦";
+    position: absolute;
+    left: 25px;
+    top: 12px;
+    color: rgba(217, 174, 103, 0.28);
+    font-size: 80px;
+}
+
+.welcome-banner h3 {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 8px;
+    color: #f4d49c;
+    font-size: 25px;
+}
+
+.welcome-banner p {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0;
+    color: #dec5a4;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+/* شريط التقدم */
+
+.xp-panel {
+    margin-top: 15px;
+}
+
+.xp-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+    color: #c8ae91;
+    font-size: 12px;
+}
+
+/* المهام */
+
+.task-complete {
+    text-decoration: line-through;
+    opacity: 0.55;
+}
+
+.task-priority-high {
+    border-right: 3px solid #b85c52;
+}
+
+.task-priority-medium {
+    border-right: 3px solid #d9ae67;
+}
+
+.task-priority-low {
+    border-right: 3px solid #78917b;
+}
+
+/* المؤقت */
+
+.timer-box {
+    text-align: center;
+    padding: 25px 15px;
+}
+
+.timer-display {
+    color: #f0d19a;
+    font-size: 65px;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+.timer-mode {
+    margin: 8px 0 18px;
+    color: #bda58b;
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* البرمجة */
+
+.coding-hero {
+    padding: 25px;
+    margin-bottom: 18px;
+    background: linear-gradient(135deg, #30232c, #55343a);
+    border: 1px solid #9b7046;
+    border-radius: 8px;
+}
+
+.coding-hero h4 {
+    margin: 0 0 8px;
+    color: #f1d29a;
+    font-size: 22px;
+}
+
+.coding-hero p {
+    margin: 0;
+    color: #d5bda0;
+    line-height: 1.8;
+}
+
+.lesson-card {
+    padding: 16px;
+    background: #2a2027;
+    border: 1px solid #76543c;
+    border-radius: 7px;
+}
+
+.lesson-card h5 {
+    margin: 0 0 8px;
+    color: #e8c486;
+    font-size: 16px;
+}
+
+.lesson-card p {
+    color: #c8ae91;
+    line-height: 1.8;
+    font-size: 13px;
+}
+
+.code-box {
+    direction: ltr;
+    overflow-x: auto;
+    padding: 15px;
+    color: #e8d7b7;
+    background: #18151a;
+    border: 1px solid #5b4436;
+    border-radius: 6px;
+    text-align: left;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+/* الشخصيات والحيوانات */
+
+.character-card,
+.pet-card {
+    text-align: center;
+    padding: 20px;
+    background: #2b2028;
+    border: 1px solid #76543c;
+    border-radius: 8px;
+}
+
+.character-emoji,
+.pet-emoji {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.character-card h5,
+.pet-card h5 {
+    margin: 5px 0;
+    color: #efd09b;
+    font-size: 16px;
+}
+
+.character-card p,
+.pet-card p {
+    color: #bda58b;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* التقويم */
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 5px;
+}
+
+.calendar-cell {
+    min-height: 75px;
+    padding: 7px;
+    background: #2a2027;
+    border: 1px solid #5b4436;
+    border-radius: 4px;
+    color: #d9c09e;
+    font-size: 12px;
+}
+
+.calendar-cell.today {
+    border-color: #d9ae67;
+    background: rgba(155, 81, 73, 0.25);
+}
+
+.calendar-cell small {
+    display: block;
+    margin-top: 8px;
+    color: #a88b6b;
+    font-size: 10px;
+}
+
+/* الإشعارات */
+
+.toast {
+    position: fixed;
+    left: 25px;
+    bottom: 25px;
+    z-index: 50;
+    max-width: 320px;
+    padding: 13px 17px;
+    color: #2a2027;
+    background: #e2bd79;
+    border: 1px solid #f0d19a;
+    border-radius: 6px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    font-size: 13px;
+    display: none;
+}
+
+.toast.show {
+    display: block;
+}
+
+/* التجاوب */
+
+@media (max-width: 1050px) {
+    .sidebar {
+        width: 230px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .two-columns,
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .app-shell {
+        display: block;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        border-left: 0;
+        border-bottom: 1px solid #76543c;
+    }
+
+    .brand {
+        padding-bottom: 12px;
+    }
+
+    .profile-card {
+        display: none;
+    }
+
+    .nav-title,
+    .sidebar-footer {
+        display: none;
+    }
+
+    .nav-list {
+        display: flex;
+        overflow-x: auto;
+        gap: 5px;
+        padding-bottom: 4px;
+    }
+
+    .nav-button {
+        width: auto;
+        flex-shrink: 0;
+        white-space: nowrap;
+        padding: 9px 11px;
+    }
+
+    .main-area {
+        padding: 15px;
+    }
+
+    .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .three-columns {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-grid {
+        gap: 9px;
+    }
+
+    .stat-card {
+        padding: 12px;
+    }
+
+    .timer-display {
+        font-size: 48px;
+    }
+}
+
+@media (max-width: 420px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .welcome-banner {
+        padding: 20px;
+    }
+
+    .welcome-banner h3 {
+        font-size: 21px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .calendar-cell {
+        min-height: 58px;
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-ornament">✦ ❦ ✦</div>
+            <h1>Lumi</h1>
+            <p>Victorian Study Manor</p>
+        </div>
+
+        <div class="profile-card">
+            <div class="avatar-circle" id="sidebarAvatar">👩🏻‍🎓</div>
+            <strong id="sidebarUserName">آنسة لومي</strong>
+            <small id="sidebarPetName">رفيقتك تنتظرك</small>
+        </div>
+
+        <div class="nav-title">القصر الرئيسي</div>
+
+        <nav class="nav-list">
+
+            <button class="nav-button active" data-page="home">
+                <span class="nav-icon">🏛️</span>
+                الرئيسية
+            </button>
+
+            <button class="nav-button" data-page="tasks">
+                <span class="nav-icon">📜</span>
+                المهام
+            </button>
+
+            <button class="nav-button" data-page="planner">
+                <span class="nav-icon">🗓️</span>
+                المخطط
+            </button>
+
+            <button class="nav-button" data-page="notes">
+                <span class="nav-icon">📚</span>
+                النوتس
+            </button>
+
+            <button class="nav-button" data-page="journals">
+                <span class="nav-icon">✒️</span>
+                اليوميات
+            </button>
+
+            <button class="nav-button" data-page="summaries">
+                <span class="nav-icon">📝</span>
+                الملخصات
+            </button>
+
+            <div class="nav-title">غرف التطوير</div>
+
+            <button class="nav-button" data-page="subjects">
+                <span class="nav-icon">🎓</span>
+                المواد
+            </button>
+
+            <button class="nav-button" data-page="coding">
+                <span class="nav-icon">💻</span>
+                أكاديمية البرمجة
+            </button>
+
+            <button class="nav-button" data-page="focus">
+                <span class="nav-icon">⏳</span>
+                غرفة التركيز
+            </button>
+
+            <button class="nav-button" data-page="habits">
+                <span class="nav-icon">🌿</span>
+                العادات
+            </button>
+
+            <button class="nav-button" data-page="goals">
+                <span class="nav-icon">🎯</span>
+                الأهداف
+            </button>
+
+            <button class="nav-button" data-page="flashcards">
+                <span class="nav-icon">🃏</span>
+                البطاقات
+            </button>
+
+            <div class="nav-title">عالم لومي</div>
+
+            <button class="nav-button" data-page="characters">
+                <span class="nav-icon">🎭</span>
+                الشخصيات
+            </button>
+
+            <button class="nav-button" data-page="pets">
+                <span class="nav-icon">🐾</span>
+                الحيوانات
+            </button>
+
+            <button class="nav-button" data-page="achievements">
+                <span class="nav-icon">🏆</span>
+                الإنجازات
+            </button>
+
+            <button class="nav-button" data-page="calculator">
+                <span class="nav-icon">🧮</span>
+                الآلة الحاسبة
+            </button>
+
+            <button class="nav-button" data-page="settings">
+                <span class="nav-icon">⚙️</span>
+                الإعدادات
+            </button>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            ❦ كل صفحة جديدة هي خطوة نحو حلمك ❦
+            <br>
+            Made with patience and imagination
+        </div>
+
+    </aside>
+
+    <main class="main-area">
+
+        <header class="topbar">
+            <div>
+                <h2 id="pageTitle">القصر الرئيسي</h2>
+                <p id="pageSubtitle">مرحبًا بكِ في مساحتك الخاصة للتعلم والإنجاز.</p>
+            </div>
+
+            <div class="topbar-actions">
+                <button class="icon-button" id="quickAddButton" title="إضافة سريعة">＋</button>
+                <button class="icon-button" id="themeButton" title="تغيير الثيم">🕯️</button>
+            </div>
+        </header>
+
+        <!-- الصفحة الرئيسية -->
+
+        <section class="page active" id="page-home">
+
+            <div class="welcome-banner">
+                <h3 id="welcomeTitle">مرحبًا بكِ يا آنسة لومي ✨</h3>
+                <p>
+                    أهلاً بكِ في قصر الدراسة الفيكتوري الخاص بكِ.
+                    رتّبي أفكارك، اكتبي أحلامك، وتقدّمي كل يوم خطوة صغيرة.
+                </p>
+
+                <div class="xp-panel">
+                    <div class="xp-info">
+                        <span>مستوى التقدم</span>
+                        <span id="homeXpText">0 / 100 XP</span>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="homeXpBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon">📜</div>
+                    <div class="stat-number" id="homeTasksCount">0</div>
+                    <div class="stat-label">المهام المكتملة</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📚</div>
+                    <div class="stat-number" id="homeNotesCount">0</div>
+                    <div class="stat-label">النوتس المحفوظة</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-number" id="homeStreakCount">0</div>
+                    <div class="stat-label">أيام الاستمرار</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-number" id="homeAchievementsCount">0</div>
+                    <div class="stat-label">الإنجازات</div>
+                </div>
+
+            </div>
+
+            <div class="two-columns">
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>مهمة اليوم</h4>
+                        <span>Today’s duties</span>
+                    </div>
+
+                    <div id="homeTodayTasks">
+                        <div class="empty-state">
+                            لا توجد مهام لليوم حتى الآن.
+                            <br>
+                            أضيفي أول مهمة من غرفة المهام.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>اقتباس القصر</h4>
+                        <span>Daily wisdom</span>
+                    </div>
+
+                    <div class="empty-state">
+                        ❦
+                        <br>
+                        الإنجاز الكبير يبدأ بخطوة صغيرة تتكرر كل يوم.
+                        <br>
+                        ❦
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- صفحة المهام -->
+
+        <section class="page" id="page-tasks">
+
+            <div class="page-heading">
+                <h3>دفتر المهام 📜</h3>
+                <p>رتّبي واجباتك ومشروعاتك ومواعيدك.</p>
+            </div>
+
+            <div class="content-grid">
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>إضافة مهمة جديدة</h4>
+                        <span>New duty</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="taskTitle">اسم المهمة</label>
+                        <input id="taskTitle" type="text" placeholder="مثال: مراجعة درس الرياضيات">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskDate">التاريخ</label>
+                            <input id="taskDate" type="date">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="taskPriority">الأولوية</label>
+                            <select id="taskPriority">
+                                <option value="low">منخفضة</option>
+                                <option value="medium" selected>متوسطة</option>
+                                <option value="high">عالية</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="taskColor">لون المهمة</label>
+                            <select id="taskColor">
+                                <option value="gold">ذهبي</option>
+                                <option value="rose">وردي قديم</option>
+                                <option value="sage">أخضر مريمي</option>
+                                <option value="blue">أزرق حبر</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="taskShape">شكل المهمة</label>
+                            <select id="taskShape">
+                                <option value="scroll">📜 لفافة</option>
+                                <option value="letter">✉️ رسالة</option>
+                                <option value="book">📖 كتاب</option>
+                                <option value="flower">🌸 زهرة</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="primary-button" id="addTaskButton">
+                        إضافة إلى دفتر المهام
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>قائمة المهام</h4>
+                        <span id="tasksSummary">0 مهمة</span>
+                    </div>
+
+                    <div id="tasksList">
+                        <div class="empty-state">
+                            دفتر المهام فارغ حاليًا.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- صفحة المخطط -->
+
+        <section class="page" id="page-planner">
+
+            <div class="page-heading">
+                <h3>المخطط الفيكتوري 🗓️</h3>
+                <p>نظّمي يومك وأسبوعك وشهرك وسنتك.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <h4>اختاري نوع التخطيط</h4>
+                    <span>Planning room</span>
+                </div>
+
+                <div class="form-row">
+                    <button class="secondary-button planner-tab" data-planner="day">اليومي</button>
+                    <button class="secondary-button planner-tab" data-planner="week">الأسبوعي</button>
+                    <button class="secondary-button planner-tab" data-planner="month">الشهري</button>
+                    <button class="secondary-button planner-tab" data-planner="year">السنوي</button>
+                </div>
+
+                <div class="ornament-line">✦</div>
+
+                <div id="plannerContent">
+                    <div class="empty-state">
+                        اختاري نوع المخطط لعرضه هنا.
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- صفحة النوتس -->
+
+        <section class="page" id="page-notes">
+
+            <div class="page-heading">
+                <h3>مكتبة النوتس 📚</h3>
+                <p>احفظي أفكارك ومعلوماتك وملاحظات الدروس.</p>
+            </div>
+
+            <div class="content-grid">
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>نوت جديدة</h4>
+                        <span>New note</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="noteTitle">العنوان</label>
+                        <input id="noteTitle" type="text" placeholder="عنوان النوت">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="noteCategory">التصنيف</label>
+                        <select id="noteCategory">
+                            <option value="study">مذاكرة</option>
+                            <option value="ideas">أفكار</option>
+                            <option value="programming">برمجة</option>
+                            <option value="personal">شخصي</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="noteContent">المحتوى</label>
+                        <textarea id="noteContent" placeholder="اكتبي ملاحظاتك هنا..."></textarea>
+                    </div>
+
+                    <button class="primary-button" id="addNoteButton">
+                        حفظ النوت
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>النوت المحفوظة</h4>
+                        <span id="notesSummary">0 نوت</span>
+                    </div>
+
+                    <div id="notesList">
+                        <div class="empty-state">
+                            لا توجد نوتس محفوظة حتى الآن.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- صفحة اليوميات -->
+
+        <section class="page" id="page-journals">
+
+            <div class="page-heading">
+                <h3>اليوميات ✒️</h3>
+                <p>مساحة هادئة لكتابة أفكارك ومشاعرك وأحداث يومك.</p>
+            </div>
+
+            <div class="content-grid">
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>صفحة جديدة من يومياتك</h4>
+                        <span>Private journal</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="journalMood">مزاج اليوم</label>
+                        <select id="journalMood">
+                            <option value="😊">سعيدة</option>
+                            <option value="😌">هادئة</option>
+                            <option value="😐">عادية</option>
+                            <option value="😔">متعبة</option>
+                            <option value="😤">متوترة</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="journalContent">اكتبي يومك</label>
+                        <textarea id="journalContent" placeholder="ما الذي حدث اليوم؟ وما الشيء الذي تفخرين به؟"></textarea>
+                    </div>
+
+                    <button class="primary-button" id="addJournalButton">
+                        حفظ صفحة اليوميات
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>الصفحات السابقة</h4>
+                        <span id="journalsSummary">0 صفحة</span>
+                    </div>
+
+                    <div id="journalsList">
+                        <div class="empty-state">
+                            لم تكتبي أي صفحة بعد.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- صفحة الملخصات -->
+
+        <section class="page" id="page-summaries">
+
+            <div class="page-heading">
+                <h3>غرفة الملخصات 📝</h3>
+                <p>حوّلي الدروس الطويلة إلى نقاط قصيرة وسهلة للمراجعة.</p>
+            </div>
+
+            <div class="content-grid">
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>إنشاء ملخص</h4>
+                        <span>Study summaries</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="summaryTitle">عنوان الدرس</label>
+                        <input id="summaryTitle" type="text" placeholder="مثال: قوانين الحركة">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="summarySubject">المادة</label>
+                        <input id="summarySubject" type="text" placeholder="مثال: Science">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="summaryContent">نقاط الملخص</label>
+                        <textarea id="summaryContent" placeholder="اكتبي أهم القوانين والأفكار..."></textarea>
+                    </div>
+
+                    <button class="primary-button" id="addSummaryButton">
+                        حفظ الملخص
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>ملخصاتي</h4>
+                        <span id="summariesSummary">0 ملخص</span>
+                    </div>
+
+                    <div id="summariesList">
+                        <div class="empty-state">
+                            لا توجد ملخصات محفوظة.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- صفحة المواد -->
+
+        <section class="page" id="page-subjects">
+
+            <div class="page-heading">
+                <h3>رفوف المواد 🎓</h3>
+                <p>تابعي تقدمك في كل مادة دراسية.</p>
+            </div>
+
+            <div class="content-grid">
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>إضافة مادة</h4>
+                        <span>Subjects</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subjectName">اسم المادة</label>
+                        <input id="subjectName" type="text" placeholder="مثال: Mathematics">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subjectColor">لون المادة</label>
+                        <select id="subjectColor">
+                            <option value="gold">ذهبي</option>
+                            <option value="rose">وردي</option>
+                            <option value="sage">أخضر</option>
+                            <option value="blue">أزرق</option>
+                        </select>
+                    </div>
+
+                    <button class="primary-button" id="addSubjectButton">
+                        إضافة المادة
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>موادي الدراسية</h4>
+                        <span id="subjectsSummary">0 مادة</span>
+                    </div>
+
+                    <div id="subjectsList">
+                        <div class="empty-state">
+                            أضيفي أول مادة دراسية.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- صفحة البرمجة -->
+
+        <section class="page" id="page-coding">
+
+            <div class="page-heading">
+                <h3>أكاديمية البرمجة 💻</h3>
+                <p>تعلمي البرمجة خطوة بخطوة داخل مكتبتك الخاصة.</p>
+            </div>
+
+            <div class="coding-hero">
+                <h4>من أول سطر كود إلى مشروعك الأول ✦</h4>
+                <p>
+                    هنا هتتعلمي أساسيات HTML وCSS وJavaScript،
+                    وبعدها نبدأ Python والخوارزميات ومشروعات عملية صغيرة.
+                </p>
+            </div>
+
+            <div class="three-columns">
+
+                <div class="lesson-card">
+                    <div class="character-emoji">🏛️</div>
+                    <h5>HTML</h5>
+                    <p>لغة بناء صفحات المواقع: العناوين، الفقرات، الأزرار، والصور.</p>
+                    <span class="badge">المستوى الأول</span>
+                </div>
+
+                <div class="lesson-card">
+                    <div class="character-emoji">🎨</div>
+                    <h5>CSS</h5>
+                    <p>لغة تنسيق الصفحات: الألوان، الخطوط، المسافات، والتصميم.</p>
+                    <span class="badge">المستوى الثاني</span>
+                </div>
+
+                <div class="lesson-card">
+                    <div class="character-emoji">⚙️</div>
+                    <h5>JavaScript</h5>
+                    <p>لغة تجعل الصفحة تفاعلية وتستجيب للضغط والكتابة والأحداث.</p>
+                    <span class="badge">المستوى الثالث</span>
+                </div>
+
+            </div>
+
+            <div class="card" style="margin-top:18px;">
+                <div class="card-title">
+                    <h4>مثال برمجي صغير</h4>
+                    <span>First code</span>
+                </div>
+
+                <pre class="code-box">var name = "Hana";
+document.getElementById("codingMessage").innerHTML =
+    "أهلًا يا " + name + " ✨";</pre>
+
+                <p id="codingMessage" style="color:#d9ae67;">
+                    النتيجة هتظهر هنا بعد ما نضيف وظائف القسم في الجزء الثالث.
+                </p>
+            </div>
+
+            <div class="card" style="margin-top:18px;">
+                <div class="card-title">
+                    <h4>خطة تعلم البرمجة</h4>
+                    <span>Learning path</span>
+                </div>
+
+                <div id="codingRoadmap">
+                    <div class="list-item">
+                        <div class="list-main">
+                            <strong>1. فهم HTML</strong>
+                            <small>بناء صفحة بسيطة بعناوين وفقرات وأزرار.</small>
+                        </div>
+                        <span class="badge">قريبًا</span>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="list-main">
+                            <strong>2. تنسيق الصفحة بـ CSS</strong>
+                            <small>اختيار الألوان والخطوط وترتيب العناصر.</small>
+                        </div>
+                        <span class="badge">قريبًا</span>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="list-main">
+                            <strong>3. التفاعل بـ JavaScript</strong>
+                            <small>جعل الأزرار والمهام والنوتس تعمل.</small>
+                        </div>
+                        <span class="badge">قريبًا</span>
+                    </div>
+
+                    <div class="list-item">
+                        <div class="list-main">
+                            <strong>4. أول مشروع حقيقي</strong>
+                            <small>إنشاء تطبيق صغير من تصميمك أنتِ.</small>
+                        </div>
+                        <span class="badge">قريبًا</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- صفحة التركيز -->
+
+        <section class="page" id="page-focus">
+
+            <div class="page-heading">
+                <h3>غرفة التركيز ⏳</h3>
+                <p>جلسة هادئة للمذاكرة باستخدام Pomodoro.</p>
+            </div>
+
+            <div class="card timer-box">
+
+                <div class="timer-mode" id="timerMode">جلسة مذاكرة</div>
+
+                <div class="timer-display" id="timerDisplay">25:00</div>
+
+                <div class="timer-controls">
+                    <button class="primary-button" id="timerStartButton">ابدئي</button>
+                    <button class="secondary-button" id="timerPauseButton">إيقاف مؤقت</button>
+                    <button class="secondary-button" id="timerResetButton">إعادة</button>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- صفحة العادات -->
+
+        <section class="page" id="page-habits">
+
+            <div class="page-heading">
+                <h3>حديقة العادات 🌿</h3>
+                <p>ازرعي عادة صغيرة وراقبي نموها.</p>
+            </div>
+
+            <div class="content-grid">
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>إضافة عادة</h4>
+                        <span>New habit</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="habitName">اسم العادة</label>
+                        <input id="habitName" type="text" placeholder="مثال: قراءة 10 دقائق">
+                    </div>
+
+                    <button class="primary-button" id="addHabitButton">
+                        زراعة عادة
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>عاداتي</h4>
+                        <span id="habitsSummary">0 عادة</span>
+                    </div>
+
+                    <div id="habitsList">
+                        <div class="empty-state">
+                            لم تزرعي أي عادة بعد.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- صفحة الأهداف -->
+
+        <section class="page" id="page-goals">
+
+            <div class="page-heading">
+                <h3>قاعة الأهداف 🎯</h3>
+                <p>اكتبي أحلامك وحوّليها إلى خطوات.</p>
+            </div>
+
+            <div class="content-grid">
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>هدف جديد</h4>
+                        <span>New goal</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goalTitle">اسم الهدف</label>
+                        <input id="goalTitle" type="text" placeholder="مثال: إنهاء كورس البرمجة">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goalDescription">وصف الهدف</label>
+                        <textarea id="goalDescription" placeholder="لماذا هذا الهدف مهم بالنسبة لكِ؟"></textarea>
+                    </div>
+
+                    <button class="primary-button" id="addGoalButton">
+                        حفظ الهدف
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>أهدافي</h4>
+                        <span id="goalsSummary">0 هدف</span>
+                    </div>
+
+                    <div id="goalsList">
+                        <div class="empty-state">
+                            لا توجد أهداف محفوظة.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- صفحة البطاقات -->
+
+        <section class="page" id="page-flashcards">
+
+            <div class="page-heading">
+                <h3>صندوق البطاقات 🃏</h3>
+                <p>راجعي المصطلحات والقوانين بطريقة سريعة.</p>
+            </div>
+
+            <div class="content-grid">
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>بطاقة جديدة</h4>
+                        <span>Flashcard</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="flashcardQuestion">السؤال</label>
+                        <input id="flashcardQuestion" type="text" placeholder="ما هي وظيفة HTML؟">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="flashcardAnswer">الإجابة</label>
+                        <textarea id="flashcardAnswer" placeholder="اكتبي الإجابة هنا..."></textarea>
+                    </div>
+
+                    <button class="primary-button" id="addFlashcardButton">
+                        إضافة بطاقة
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>بطاقاتي</h4>
+                        <span id="flashcardsSummary">0 بطاقة</span>
+                    </div>
+
+                    <div id="flashcardsList">
+                        <div class="empty-state">
+                            لا توجد بطاقات محفوظة.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- صفحة الشخصيات -->
+
+        <section class="page" id="page-characters">
+
+            <div class="page-heading">
+                <h3>غرفة الشخصيات 🎭</h3>
+                <p>اختاري شخصية ترافقك في رحلتك داخل القصر.</p>
+            </div>
+
+            <div class="three-columns">
+
+                <div class="character-card">
+                    <div class="character-emoji">👩🏻‍🎓</div>
+                    <h5>الطالبة النبيلة</h5>
+                    <p>تحب الكتب والتعلم والإنجاز الهادئ.</p>
+                    <button class="secondary-button character-select" data-character="👩🏻‍🎓">اختيار</button>
+                </div>
+
+                <div class="character-card">
+                    <div class="character-emoji">🧑🏻‍💻</div>
+                    <h5>المخترعة الصغيرة</h5>
+                    <p>تحب البرمجة والتجارب وصناعة الأفكار.</p>
+                    <button class="secondary-button character-select" data-character="🧑🏻‍💻">اختيار</button>
+                </div>
+
+                <div class="character-card">
+                    <div class="character-emoji">🧚🏻‍♀️</div>
+                    <h5>حارسة المكتبة</h5>
+                    <p>تحب الخيال والقصص وتنظيم المعرفة.</p>
+                    <button class="secondary-button character-select" data-character="🧚🏻‍♀️">اختيار</button>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- صفحة الحيوانات -->
+
+        <section class="page" id="page-pets">
+
+            <div class="page-heading">
+                <h3>حديقة الحيوانات 🐾</h3>
+                <p>اختاري رفيقًا لطيفًا يرافقك أثناء المذاكرة.</p>
+            </div>
+
+            <div class="three-columns">
+
+                <div class="pet-card">
+                    <div class="pet-emoji">🐈</div>
+                    <h5>القطة لونا</h5>
+                    <p>رفيقة هادئة تحب الجلوس بجوار الكتب.</p>
+                    <button class="secondary-button pet-select" data-pet="🐈" data-name="لونا">اختيار</button>
+                </div>
+
+                <div class="pet-card">
+                    <div class="pet-emoji">🦉</div>
+                    <h5>البومة أوليفر</h5>
+                    <p>رفيق حكيم يحب الملاحظات والمعلومات.</p>
+                    <button class="secondary-button pet-select" data-pet="🦉" data-name="أوليفر">اختيار</button>
+                </div>
+
+                <div class="pet-card">
+                    <div class="pet-emoji">🐇</div>
+                    <h5>الأرنب بيرل</h5>
+                    <p>رفيق لطيف يحب الأهداف والخطوات الصغيرة.</p>
+                    <button class="secondary-button pet-select" data-pet="🐇" data-name="بيرل">اختيار</button>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- صفحة الإنجازات -->
+
+        <section class="page" id="page-achievements">
+
+            <div class="page-heading">
+                <h3>قاعة الإنجازات 🏆</h3>
+                <p>كل خطوة صغيرة تستحق أن تُحتفل بها.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <h4>شاراتك</h4>
+                    <span id="achievementsSummary">0 إنجاز</span>
+                </div>
+
+                <div id="achievementsList">
+                    <div class="empty-state">
+                        ابدئي بإكمال المهام لتحصلي على أول شارة.
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- صفحة الآلة الحاسبة -->
+
+        <section class="page" id="page-calculator">
+
+            <div class="page-heading">
+                <h3>مكتب الحسابات 🧮</h3>
+                <p>آلة حاسبة بسيطة للمذاكرة والمسائل اليومية.</p>
+            </div>
+
+            <div class="card">
+                <div class="form-group">
+                    <label for="calculatorInput">اكتبي العملية الحسابية</label>
+                    <input id="calculatorInput" type="text" placeholder="مثال: 25 + 15">
+                </div>
+
+                <button class="primary-button" id="calculateButton">
+                    احسبي النتيجة
+                </button>
+
+                <div class="ornament-line">✦</div>
+
+                <div id="calculatorResult" class="empty-state">
+                    النتيجة ستظهر هنا.
+                </div>
+            </div>
+
+        </section>
+
+        <!-- صفحة الإعدادات -->
+
+        <section class="page" id="page-settings">
+
+            <div class="page-heading">
+                <h3>إعدادات القصر ⚙️</h3>
+                <p>خصّصي Lumi بالطريقة التي تحبينها.</p>
+            </div>
+
+            <div class="content-grid">
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>بياناتك</h4>
+                        <span>Personal details</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="settingsName">اسمك داخل التطبيق</label>
+                        <input id="settingsName" type="text" placeholder="اكتبي اسمك">
+                    </div>
+
+                    <button class="primary-button" id="saveSettingsButton">
+                        حفظ التغييرات
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <h4>البيانات</h4>
+                        <span>Data management</span>
+                    </div>
+
+                    <button class="secondary-button" id="exportButton">
+                        تصدير نسخة احتياطية
+                    </button>
+
+                    <button class="danger-button" id="resetButton" style="margin-top:10px;">
+                        إعادة ضبط التطبيق
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<div class="toast" id="toastMessage"></div>
+
+<!-- لا تضيفي </body> أو </html> هنا.
+     الجزء الثاني سيبدأ بكود JavaScript داخل نفس الملف. --><script>
+/* =========================================
+   Lumi V4 — الجزء الثاني
+   البيانات والتنقل والمهام والنوتس واليوميات
+   ========================================= */
+
+var STORAGE_KEY = "lumi_v4_victorian_data";
+
+var appData = {
+    userName: "آنسة لومي",
+    avatar: "👩🏻‍🎓",
+    pet: "🐈",
+    petName: "لونا",
+    theme: "victorian",
+    tasks: [],
+    notes: [],
+    journals: [],
+    summaries: [],
+    subjects: [],
+    habits: [],
+    goals: [],
+    flashcards: [],
+    focusSessions: [],
+    completedTasks: 0,
+    xp: 0,
+    streak: 0,
+    lastActiveDate: ""
+};
+
+var pageNames = {
+    home: {
+        title: "القصر الرئيسي",
+        subtitle: "مرحبًا بكِ في مساحتك الخاصة للتعلم والإنجاز."
+    },
+    tasks: {
+        title: "دفتر المهام",
+        subtitle: "رتّبي واجباتك ومشروعاتك ومواعيدك."
+    },
+    planner: {
+        title: "المخطط الفيكتوري",
+        subtitle: "نظّمي يومك وأسبوعك وشهرك وسنتك."
+    },
+    notes: {
+        title: "مكتبة النوتس",
+        subtitle: "احفظي أفكارك ومعلوماتك وملاحظات الدروس."
+    },
+    journals: {
+        title: "اليوميات",
+        subtitle: "مساحة هادئة لكتابة أفكارك وأحداث يومك."
+    },
+    summaries: {
+        title: "غرفة الملخصات",
+        subtitle: "حوّلي الدروس الطويلة إلى نقاط سهلة."
+    },
+    subjects: {
+        title: "رفوف المواد",
+        subtitle: "تابعي تقدمك في كل مادة دراسية."
+    },
+    coding: {
+        title: "أكاديمية البرمجة",
+        subtitle: "تعلمي البرمجة خطوة بخطوة."
+    },
+    focus: {
+        title: "غرفة التركيز",
+        subtitle: "جلسة هادئة للمذاكرة باستخدام Pomodoro."
+    },
+    habits: {
+        title: "حديقة العادات",
+        subtitle: "ازرعي عادة صغيرة وراقبي نموها."
+    },
+    goals: {
+        title: "قاعة الأهداف",
+        subtitle: "اكتبي أحلامك وحوّليها إلى خطوات."
+    },
+    flashcards: {
+        title: "صندوق البطاقات",
+        subtitle: "راجعي المصطلحات والقوانين بسرعة."
+    },
+    characters: {
+        title: "غرفة الشخصيات",
+        subtitle: "اختاري شخصية ترافقك في رحلتك."
+    },
+    pets: {
+        title: "حديقة الحيوانات",
+        subtitle: "اختاري رفيقًا لطيفًا أثناء المذاكرة."
+    },
+    achievements: {
+        title: "قاعة الإنجازات",
+        subtitle: "كل خطوة صغيرة تستحق الاحتفال."
+    },
+    calculator: {
+        title: "مكتب الحسابات",
+        subtitle: "آلة حاسبة بسيطة للمذاكرة."
+    },
+    settings: {
+        title: "إعدادات القصر",
+        subtitle: "خصّصي Lumi بالطريقة التي تحبينها."
+    }
+};
+
+/* أدوات مساعدة */
+
+function getElement(id) {
+    return document.getElementById(id);
+}
+
+function makeId() {
+    return String(new Date().getTime()) + String(Math.floor(Math.random() * 1000));
+}
+
+function todayString() {
+    var date = new Date();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+
+    if (month < 10) {
+        month = "0" + month;
+    }
+
+    if (day < 10) {
+        day = "0" + day;
+    }
+
+    return date.getFullYear() + "-" + month + "-" + day;
+}
+
+function escapeHTML(value) {
+    if (value === null || value === undefined) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function saveData() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+    } catch (error) {
+        showToast("تعذر حفظ البيانات في المتصفح.");
+    }
+}
+
+function loadData() {
+    try {
+        var saved = localStorage.getItem(STORAGE_KEY);
+
+        if (saved) {
+            var parsed = JSON.parse(saved);
+            var key;
+
+            for (key in parsed) {
+                if (parsed.hasOwnProperty(key)) {
+                    appData[key] = parsed[key];
+                }
+            }
+        }
+    } catch (error) {
+        showToast("تعذر قراءة البيانات القديمة.");
+    }
+
+    if (!appData.tasks) {
+        appData.tasks = [];
+    }
+
+    if (!appData.notes) {
+        appData.notes = [];
+    }
+
+    if (!appData.journals) {
+        appData.journals = [];
+    }
+
+    if (!appData.summaries) {
+        appData.summaries = [];
+    }
+
+    if (!appData.subjects) {
+        appData.subjects = [];
+    }
+
+    if (!appData.habits) {
+        appData.habits = [];
+    }
+
+    if (!appData.goals) {
+        appData.goals = [];
+    }
+
+    if (!appData.flashcards) {
+        appData.flashcards = [];
+    }
+}
+
+function showToast(message) {
+    var toast = getElement("toastMessage");
+
+    if (!toast) {
+        return;
+    }
+
+    toast.innerHTML = escapeHTML(message);
+    toast.className = "toast show";
+
+    window.setTimeout(function() {
+        toast.className = "toast";
+    }, 2500);
+}
+
+function updateProfile() {
+    var name = appData.userName || "آنسة لومي";
+    var avatar = appData.avatar || "👩🏻‍🎓";
+    var pet = appData.pet || "🐈";
+    var petName = appData.petName || "رفيقتك تنتظرك";
+
+    if (getElement("sidebarUserName")) {
+        getElement("sidebarUserName").innerHTML = escapeHTML(name);
+    }
+
+    if (getElement("sidebarAvatar")) {
+        getElement("sidebarAvatar").innerHTML = avatar;
+    }
+
+    if (getElement("sidebarPetName")) {
+        getElement("sidebarPetName").innerHTML =
+            escapeHTML(pet + " " + petName);
+    }
+
+    if (getElement("welcomeTitle")) {
+        getElement("welcomeTitle").innerHTML =
+            "مرحبًا بكِ يا " + escapeHTML(name) + " ✨";
+    }
+
+    if (getElement("settingsName")) {
+        getElement("settingsName").value = name;
+    }
+}
+
+function updateHomeStats() {
+    var completed = 0;
+    var i;
+
+    for (i = 0; i < appData.tasks.length; i++) {
+        if (appData.tasks[i].completed) {
+            completed++;
+        }
+    }
+
+    appData.completedTasks = completed;
+
+    if (getElement("homeTasksCount")) {
+        getElement("homeTasksCount").innerHTML = completed;
+    }
+
+    if (getElement("homeNotesCount")) {
+        getElement("homeNotesCount").innerHTML = appData.notes.length;
+    }
+
+    if (getElement("homeStreakCount")) {
+        getElement("homeStreakCount").innerHTML = appData.streak || 0;
+    }
+
+    if (getElement("homeAchievementsCount")) {
+        getElement("homeAchievementsCount").innerHTML =
+            getAchievementCount();
+    }
+
+    var xp = Number(appData.xp) || 0;
+    var currentXp = xp % 100;
+
+    if (getElement("homeXpText")) {
+        getElement("homeXpText").innerHTML =
+            currentXp + " / 100 XP";
+    }
+
+    if (getElement("homeXpBar")) {
+        getElement("homeXpBar").style.width = currentXp + "%";
+    }
+
+    saveData();
+}
+
+function getAchievementCount() {
+    var count = 0;
+
+    if (appData.completedTasks >= 1) {
+        count++;
+    }
+
+    if (appData.completedTasks >= 5) {
+        count++;
+    }
+
+    if (appData.notes.length >= 1) {
+        count++;
+    }
+
+    if (appData.journals.length >= 1) {
+        count++;
+    }
+
+    if (appData.subjects.length >= 3) {
+        count++;
+    }
+
+    if (appData.streak >= 3) {
+        count++;
+    }
+
+    return count;
+}
+
+/* التنقل بين الصفحات */
+
+function openPage(pageName) {
+    var pages = document.getElementsByClassName("page");
+    var buttons = document.getElementsByClassName("nav-button");
+    var i;
+    var page;
+
+    for (i = 0; i < pages.length; i++) {
+        pages[i].className = "page";
+    }
+
+    for (i = 0; i < buttons.length; i++) {
+        buttons[i].className = "nav-button";
+    }
+
+    page = getElement("page-" + pageName);
+
+    if (page) {
+        page.className = "page active";
+    }
+
+    for (i = 0; i < buttons.length; i++) {
+        if (buttons[i].getAttribute("data-page") === pageName) {
+            buttons[i].className = "nav-button active";
+        }
+    }
+
+    if (pageNames[pageName]) {
+        getElement("pageTitle").innerHTML = pageNames[pageName].title;
+        getElement("pageSubtitle").innerHTML = pageNames[pageName].subtitle;
+    }
+
+    window.scrollTo(0, 0);
+}
+
+function initNavigation() {
+    var buttons = document.getElementsByClassName("nav-button");
+    var i;
+
+    for (i = 0; i < buttons.length; i++) {
+        buttons[i].onclick = function() {
+            var pageName = this.getAttribute("data-page");
+            openPage(pageName);
+        };
+    }
+
+    if (getElement("quickAddButton")) {
+        getElement("quickAddButton").onclick = function() {
+            openPage("tasks");
+
+            if (getElement("taskTitle")) {
+                getElement("taskTitle").focus();
+            }
+        };
+    }
+
+    if (getElement("themeButton")) {
+        getElement("themeButton").onclick = function() {
+            showToast("الثيمات الباستيل هتتفعّل في الجزء الثالث 🤎🩷");
+        };
+    }
+}
+
+/* المهام */
+
+function renderTasks() {
+    var list = getElement("tasksList");
+    var summary = getElement("tasksSummary");
+    var homeList = getElement("homeTodayTasks");
+    var html = "";
+    var homeHTML = "";
+    var i;
+    var task;
+    var completedCount = 0;
+
+    if (!list) {
+        return;
+    }
+
+    for (i = 0; i < appData.tasks.length; i++) {
+        task = appData.tasks[i];
+
+        if (task.completed) {
+            completedCount++;
+        }
+
+        html +=
+            '<div class="list-item task-priority-' + escapeHTML(task.priority) + '">' +
+                '<div class="list-main">' +
+                    '<strong class="' + (task.completed ? "task-complete" : "") + '">' +
+                        escapeHTML(task.shape) + " " + escapeHTML(task.title) +
+                    '</strong>' +
+                    '<small>' +
+                        escapeHTML(task.date || "من غير تاريخ") +
+                        " • " +
+                        escapeHTML(task.priorityText || "متوسطة") +
+                    '</small>' +
+                '</div>' +
+                '<div class="list-actions">' +
+                    '<button class="secondary-button small-button task-done-button" data-id="' +
+                        escapeHTML(task.id) + '">' +
+                        (task.completed ? "تراجع" : "تم") +
+                    '</button>' +
+                    '<button class="danger-button small-button task-delete-button" data-id="' +
+                        escapeHTML(task.id) + '">' +
+                        "حذف" +
+                    '</button>' +
+                '</div>' +
+            '</div>';
+    }
+
+    if (appData.tasks.length === 0) {
+        list.innerHTML =
+            '<div class="empty-state">دفتر المهام فارغ حاليًا.</div>';
+    } else {
+        list.innerHTML = html;
+    }
+
+    if (summary) {
+        summary.innerHTML = appData.tasks.length + " مهمة";
+    }
+
+    for (i = 0; i < appData.tasks.length; i++) {
+        task = appData.tasks[i];
+
+        if (task.date === todayString()) {
+            homeHTML +=
+                '<div class="list-item">' +
+                    '<div class="list-main">' +
+                        '<strong class="' + (task.completed ? "task-complete" : "") + '">' +
+                            escapeHTML(task.shape) + " " + escapeHTML(task.title) +
+                        '</strong>' +
+                        '<small>مهمة اليوم</small>' +
+                    '</div>' +
+                    '<span class="badge">' +
+                        (task.completed ? "مكتملة" : "قيد التنفيذ") +
+                    '</span>' +
+                '</div>';
+        }
+    }
+
+    if (homeList) {
+        if (homeHTML === "") {
+            homeList.innerHTML =
+                '<div class="empty-state">لا توجد مهام لليوم حتى الآن.</div>';
+        } else {
+            homeList.innerHTML = homeHTML;
+        }
+    }
+
+    var doneButtons = document.getElementsByClassName("task-done-button");
+    var deleteButtons = document.getElementsByClassName("task-delete-button");
+
+    for (i = 0; i < doneButtons.length; i++) {
+        doneButtons[i].onclick = function() {
+            toggleTask(this.getAttribute("data-id"));
+        };
+    }
+
+    for (i = 0; i < deleteButtons.length; i++) {
+        deleteButtons[i].onclick = function() {
+            deleteTask(this.getAttribute("data-id"));
+        };
+    }
+
+    appData.completedTasks = completedCount;
+    updateHomeStats();
+}
+
+function addTask() {
+    var title = getElement("taskTitle").value;
+    var date = getElement("taskDate").value;
+    var priority = getElement("taskPriority").value;
+    var color = getElement("taskColor").value;
+    var shape = getElement("taskShape").value;
+    var priorityText = "متوسطة";
+
+    if (priority === "high") {
+        priorityText = "عالية";
+    }
+
+    if (priority === "low") {
+        priorityText = "منخفضة";
+    }
+
+    if (title.replace(/\s/g, "") === "") {
+        showToast("اكتبي اسم المهمة أولًا.");
+        return;
+    }
+
+    appData.tasks.push({
+        id: makeId(),
+        title: title,
+        date: date || todayString(),
+        priority: priority,
+        priorityText: priorityText,
+        color: color,
+        shape: shape,
+        completed: false,
+        createdAt: todayString()
+    });
+
+    getElement("taskTitle").value = "";
+    getElement("taskDate").value = "";
+
+    appData.xp += 2;
+    saveData();
+    renderTasks();
+    showToast("تمت إضافة المهمة إلى الدفتر 📜");
+}
+
+function toggleTask(id) {
+    var i;
+    var task;
+
+    for (i = 0; i < appData.tasks.length; i++) {
+        task = appData.tasks[i];
+
+        if (String(task.id) === String(id)) {
+            task.completed = !task.completed;
+
+            if (task.completed) {
+                appData.xp += 10;
+                showToast("أحسنتِ! تمت المهمة وحصلتِ على XP ✨");
+            } else {
+                appData.xp -= 10;
+
+                if (appData.xp < 0) {
+                    appData.xp = 0;
+                }
+
+                showToast("تم إرجاع المهمة إلى القائمة.");
+            }
+
+            break;
+        }
+    }
+
+    saveData();
+    renderTasks();
+}
+
+function deleteTask(id) {
+    var newTasks = [];
+    var i;
+
+    for (i = 0; i < appData.tasks.length; i++) {
+        if (String(appData.tasks[i].id) !== String(id)) {
+            newTasks.push(appData.tasks[i]);
+        }
+    }
+
+    appData.tasks = newTasks;
+    saveData();
+    renderTasks();
+    showToast("تم حذف المهمة.");
+}
+
+/* النوتس */
+
+function renderNotes() {
+    var list = getElement("notesList");
+    var summary = getElement("notesSummary");
+    var html = "";
+    var i;
+    var note;
+
+    if (!list) {
+        return;
+    }
+
+    for (i = 0; i < appData.notes.length; i++) {
+        note = appData.notes[i];
+
+        html +=
+            '<div class="list-item">' +
+                '<div class="list-main">' +
+                    '<strong>📚 ' + escapeHTML(note.title) + '</strong>' +
+                    '<small>' +
+                        escapeHTML(note.categoryText || "مذاكرة") +
+                        " • " +
+                        escapeHTML(note.date) +
+                    '</small>' +
+                    '<p style="color:#c8ae91;line-height:1.7;font-size:12px;">' +
+                        escapeHTML(note.content) +
+                    '</p>' +
+                '</div>' +
+                '<div class="list-actions">' +
+                    '<button class="danger-button small-button note-delete-button" data-id="' +
+                        escapeHTML(note.id) + '">' +
+                        "حذف" +
+                    '</button>' +
+                '</div>' +
+            '</div>';
+    }
+
+    if (appData.notes.length === 0) {
+        list.innerHTML =
+            '<div class="empty-state">لا توجد نوتس محفوظة حتى الآن.</div>';
+    } else {
+        list.innerHTML = html;
+    }
+
+    if (summary) {
+        summary.innerHTML = appData.notes.length + " نوت";
+    }
+
+    var deleteButtons = document.getElementsByClassName("note-delete-button");
+
+    for (i = 0; i < deleteButtons.length; i++) {
+        deleteButtons[i].onclick = function() {
+            deleteNote(this.getAttribute("data-id"));
+        };
+    }
+
+    updateHomeStats();
+}
+
+function addNote() {
+    var title = getElement("noteTitle").value;
+    var category = getElement("noteCategory").value;
+    var content = getElement("noteContent").value;
+    var categoryText = "مذاكرة";
+
+    if (category === "ideas") {
+        categoryText = "أفكار";
+    }
+
+    if (category === "programming") {
+        categoryText = "برمجة";
+    }
+
+    if (category === "personal") {
+        categoryText = "شخصي";
+    }
+
+    if (title.replace(/\s/g, "") === "") {
+        showToast("اكتبي عنوان النوت أولًا.");
+        return;
+    }
+
+    if (content.replace(/\s/g, "") === "") {
+        showToast("اكتبي محتوى النوت.");
+        return;
+    }
+
+    appData.notes.push({
+        id: makeId(),
+        title: title,
+        category: category,
+        categoryText: categoryText,
+        content: content,
+        date: todayString()
+    });
+
+    getElement("noteTitle").value = "";
+    getElement("noteContent").value = "";
+
+    appData.xp += 5;
+    saveData();
+    renderNotes();
+    showToast("تم حفظ النوت في المكتبة 📚");
+}
+
+function deleteNote(id) {
+    var newNotes = [];
+    var i;
+
+    for (i = 0; i < appData.notes.length; i++) {
+        if (String(appData.notes[i].id) !== String(id)) {
+            newNotes.push(appData.notes[i]);
+        }
+    }
+
+    appData.notes = newNotes;
+    saveData();
+    renderNotes();
+    showToast("تم حذف النوت.");
+}
+
+/* اليوميات */
+
+function renderJournals() {
+    var list = getElement("journalsList");
+    var summary = getElement("journalsSummary");
+    var html = "";
+    var i;
+    var journal;
+
+    if (!list) {
+        return;
+    }
+
+    for (i = 0; i < appData.journals.length; i++) {
+        journal = appData.journals[i];
+
+        html +=
+            '<div class="list-item">' +
+                '<div class="list-main">' +
+                    '<strong>' +
+                        escapeHTML(journal.mood) +
+                        " صفحة يوميات" +
+                    '</strong>' +
+                    '<small>' + escapeHTML(journal.date) + '</small>' +
+                    '<p style="color:#c8ae91;line-height:1.8;font-size:12px;">' +
+                        escapeHTML(journal.content) +
+                    '</p>' +
+                '</div>' +
+                '<div class="list-actions">' +
+                    '<button class="danger-button small-button journal-delete-button" data-id="' +
+                        escapeHTML(journal.id) + '">' +
+                        "حذف" +
+                    '</button>' +
+                '</div>' +
+            '</div>';
+    }
+
+    if (appData.journals.length === 0) {
+        list.innerHTML =
+            '<div class="empty-state">لم تكتبي أي صفحة بعد.</div>';
+    } else {
+        list.innerHTML = html;
+    }
+
+    if (summary) {
+        summary.innerHTML = appData.journals.length + " صفحة";
+    }
+
+    var deleteButtons =
+        document.getElementsByClassName("journal-delete-button");
+
+    for (i = 0; i < deleteButtons.length; i++) {
+        deleteButtons[i].onclick = function() {
+            deleteJournal(this.getAttribute("data-id"));
+        };
+    }
+
+    updateHomeStats();
+}
+
+function addJournal() {
+    var mood = getElement("journalMood").value;
+    var content = getElement("journalContent").value;
+
+    if (content.replace(/\s/g, "") === "") {
+        showToast("اكتبي شيئًا في يومياتك أولًا.");
+        return;
+    }
+
+    appData.journals.push({
+        id: makeId(),
+        mood: mood,
+        content: content,
+        date: todayString()
+    });
+
+    getElement("journalContent").value = "";
+
+    appData.xp += 5;
+    saveData();
+    renderJournals();
+    showToast("تم حفظ صفحة اليوميات ✒️");
+}
+
+function deleteJournal(id) {
+    var newJournals = [];
+    var i;
+
+    for (i = 0; i < appData.journals.length; i++) {
+        if (String(appData.journals[i].id) !== String(id)) {
+            newJournals.push(appData.journals[i]);
+        }
+    }
+
+    appData.journals = newJournals;
+    saveData();
+    renderJournals();
+    showToast("تم حذف صفحة اليوميات.");
+}
+
+/* الملخصات */
+
+function renderSummaries() {
+    var list = getElement("summariesList");
+    var summary = getElement("summariesSummary");
+    var html = "";
+    var i;
+    var item;
+
+    if (!list) {
+        return;
+    }
+
+    for (i = 0; i < appData.summaries.length; i++) {
+        item = appData.summaries[i];
+
+        html +=
+            '<div class="list-item">' +
+                '<div class="list-main">' +
+                    '<strong>📝 ' + escapeHTML(item.title) + '</strong>' +
+                    '<small>' +
+                        escapeHTML(item.subject) +
+                        " • " +
+                        escapeHTML(item.date) +
+                    '</small>' +
+                    '<p style="color:#c8ae91;line-height:1.8;font-size:12px;">' +
+                        escapeHTML(item.content) +
+                    '</p>' +
+                '</div>' +
+                '<div class="list-actions">' +
+                    '<button class="danger-button small-button summary-delete-button" data-id="' +
+                        escapeHTML(item.id) + '">' +
+                        "حذف" +
+                    '</button>' +
+                '</div>' +
+            '</div>';
+    }
+
+    if (appData.summaries.length === 0) {
+        list.innerHTML =
+            '<div class="empty-state">لا توجد ملخصات محفوظة.</div>';
+    } else {
+        list.innerHTML = html;
+    }
+
+    if (summary) {
+        summary.innerHTML = appData.summaries.length + " ملخص";
+    }
+
+    var deleteButtons =
+        document.getElementsByClassName("summary-delete-button");
+
+    for (i = 0; i < deleteButtons.length; i++) {
+        deleteButtons[i].onclick = function() {
+            deleteSummary(this.getAttribute("data-id"));
+        };
+    }
+}
+
+function addSummary() {
+    var title = getElement("summaryTitle").value;
+    var subject = getElement("summarySubject").value;
+    var content = getElement("summaryContent").value;
+
+    if (title.replace(/\s/g, "") === "") {
+        showToast("اكتبي عنوان الدرس.");
+        return;
+    }
+
+    if (content.replace(/\s/g, "") === "") {
+        showToast("اكتبي نقاط الملخص.");
+        return;
+    }
+
+    appData.summaries.push({
+        id: makeId(),
+        title: title,
+        subject: subject || "عام",
+        content: content,
+        date: todayString()
+    });
+
+    getElement("summaryTitle").value = "";
+    getElement("summarySubject").value = "";
+    getElement("summaryContent").value = "";
+
+    appData.xp += 8;
+    saveData();
+    renderSummaries();
+    showToast("تم حفظ الملخص 📝");
+}
+
+function deleteSummary(id) {
+    var newSummaries = [];
+    var i;
+
+    for (i = 0; i < appData.summaries.length; i++) {
+        if (String(appData.summaries[i].id) !== String(id)) {
+            newSummaries.push(appData.summaries[i]);
+        }
+    }
+
+    appData.summaries = newSummaries;
+    saveData();
+    renderSummaries();
+    showToast("تم حذف الملخص.");
+}
+
+/* ربط أزرار الجزء الثاني */
+
+function initPartTwoButtons() {
+    if (getElement("addTaskButton")) {
+        getElement("addTaskButton").onclick = addTask;
+    }
+
+    if (getElement("addNoteButton")) {
+        getElement("addNoteButton").onclick = addNote;
+    }
+
+    if (getElement("addJournalButton")) {
+        getElement("addJournalButton").onclick = addJournal;
+    }
+
+    if (getElement("addSummaryButton")) {
+        getElement("addSummaryButton").onclick = addSummary;
+    }
+}
+
+/* تشغيل وظائف الجزء الثاني */
+
+function renderPartTwo() {
+    updateProfile();
+    updateHomeStats();
+    renderTasks();
+    renderNotes();
+    renderJournals();
+    renderSummaries();
+}
+
+loadData();
+initNavigation();
+initPartTwoButtons();
+renderPartTwo();
+
+/* الجزء الثالث سيكمل باقي الوظائف ويغلق الملف. */loadData();
+initNavigation();
+initPartTwoButtons();
+renderPartTwo();
+
+/* =========================================
+   Lumi V4 — الجزء الثالث والأخير
+   باقي الأقسام + الإعدادات + إغلاق الملف
+   ========================================= */
+
+function renderSubjects() {
+    var container = getElement("subjectsList");
+    if (!container) return;
+
+    var html = "";
+    if (!appData.subjects || appData.subjects.length === 0) {
+        html = '<div class="empty-state">لسه مفيش مواد مضافة 🌷</div>';
+    } else {
+        for (var i = 0; i < appData.subjects.length; i++) {
+            var subject = appData.subjects[i];
+            html += '<div class="item-card">';
+            html += '<div class="item-card-main">';
+            html += '<h3>' + escapeHTML(subject.name) + '</h3>';
+            html += '<p>' + escapeHTML(subject.description || "مادة دراسية") + '</p>';
+            html += '</div>';
+            html += '<button class="small-danger" onclick="deleteSubject(' + i + ')">حذف</button>';
+            html += '</div>';
+        }
+    }
+    container.innerHTML = html;
+}
+
+function addSubject() {
+    var nameInput = getElement("subjectName");
+    var descriptionInput = getElement("subjectDescription");
+
+    if (!nameInput || nameInput.value.trim() === "") {
+        showToast("اكتبي اسم المادة الأول 📚");
+        return;
+    }
+
+    if (!appData.subjects) appData.subjects = [];
+
+    appData.subjects.push({
+        name: nameInput.value.trim(),
+        description: descriptionInput ? descriptionInput.value.trim() : ""
+    });
+
+    nameInput.value = "";
+    if (descriptionInput) descriptionInput.value = "";
+
+    saveData();
+    renderSubjects();
+    showToast("تمت إضافة المادة بنجاح ✨");
+}
+
+function deleteSubject(index) {
+    if (!confirm("تحبي تحذفي المادة دي؟")) return;
+    appData.subjects.splice(index, 1);
+    saveData();
+    renderSubjects();
+    showToast("تم حذف المادة");
+}
+
+function renderHabits() {
+    var container = getElement("habitsList");
+    if (!container) return;
+
+    var html = "";
+
+    if (!appData.habits || appData.habits.length === 0) {
+        html = '<div class="empty-state">أضيفي عادة صغيرة تساعدك كل يوم 🌱</div>';
+    } else {
+        for (var i = 0; i < appData.habits.length; i++) {
+            var habit = appData.habits[i];
+            html += '<div class="item-card habit-card">';
+            html += '<div class="item-card-main">';
+            html += '<h3>' + escapeHTML(habit.name) + '</h3>';
+            html += '<p>عدد مرات الإنجاز: ' + (habit.count || 0) + '</p>';
+            html += '</div>';
+            html += '<div class="item-actions">';
+            html += '<button class="small-button" onclick="completeHabit(' + i + ')">✓ أنجزت</button>';
+            html += '<button class="small-danger" onclick="deleteHabit(' + i + ')">حذف</button>';
+            html += '</div>';
+            html += '</div>';
+        }
+    }
+
+    container.innerHTML = html;
+}
+
+function addHabit() {
+    var input = getElement("habitName");
+
+    if (!input || input.value.trim() === "") {
+        showToast("اكتبي اسم العادة 🌸");
+        return;
+    }
+
+    if (!appData.habits) appData.habits = [];
+
+    appData.habits.push({
+        name: input.value.trim(),
+        count: 0,
+        lastDate: ""
+    });
+
+    input.value = "";
+    saveData();
+    renderHabits();
+    showToast("تمت إضافة العادة 🌱");
+}
+
+function completeHabit(index) {
+    var today = todayString();
+    var habit = appData.habits[index];
+
+    if (habit.lastDate === today) {
+        showToast("إنتِ أنجزتي العادة دي النهارده بالفعل 💗");
+        return;
+    }
+
+    habit.count = (habit.count || 0) + 1;
+    habit.lastDate = today;
+
+    appData.xp = (appData.xp || 0) + 5;
+
+    saveData();
+    renderHabits();
+    updateHomeStats();
+    showToast("شطورة! +5 نقاط ⭐");
+}
+
+function deleteHabit(index) {
+    if (!confirm("تحبي تحذفي العادة دي؟")) return;
+    appData.habits.splice(index, 1);
+    saveData();
+    renderHabits();
+}
+
+function renderGoals() {
+    var container = getElement("goalsList");
+    if (!container) return;
+
+    var html = "";
+
+    if (!appData.goals || appData.goals.length === 0) {
+        html = '<div class="empty-state">اكتبي هدفًا صغيرًا أو كبيرًا واحفظيه هنا 🎯</div>';
+    } else {
+        for (var i = 0; i < appData.goals.length; i++) {
+            var goal = appData.goals[i];
+            var progress = parseInt(goal.progress, 10) || 0;
+
+            if (progress < 0) progress = 0;
+            if (progress > 100) progress = 100;
+
+            html += '<div class="item-card">';
+            html += '<div class="item-card-main">';
+            html += '<h3>' + escapeHTML(goal.name) + '</h3>';
+            html += '<p>' + escapeHTML(goal.description || "") + '</p>';
+            html += '<div class="progress-bar"><div class="progress-fill" style="width:' + progress + '%"></div></div>';
+            html += '<span class="progress-text">' + progress + '% مكتمل</span>';
+            html += '</div>';
+            html += '<div class="item-actions">';
+            html += '<button class="small-button" onclick="increaseGoal(' + i + ')">+10%</button>';
+            html += '<button class="small-danger" onclick="deleteGoal(' + i + ')">حذف</button>';
+            html += '</div>';
+            html += '</div>';
+        }
+    }
+
+    container.innerHTML = html;
+}
+
+function addGoal() {
+    var nameInput = getElement("goalName");
+    var descriptionInput = getElement("goalDescription");
+
+    if (!nameInput || nameInput.value.trim() === "") {
+        showToast("اكتبي اسم الهدف 🎯");
+        return;
+    }
+
+    if (!appData.goals) appData.goals = [];
+
+    appData.goals.push({
+        name: nameInput.value.trim(),
+        description: descriptionInput ? descriptionInput.value.trim() : "",
+        progress: 0
+    });
+
+    nameInput.value = "";
+    if (descriptionInput) descriptionInput.value = "";
+
+    saveData();
+    renderGoals();
+    showToast("تم حفظ الهدف ✨");
+}
+
+function increaseGoal(index) {
+    var goal = appData.goals[index];
+    goal.progress = (parseInt(goal.progress, 10) || 0) + 10;
+
+    if (goal.progress > 100) goal.progress = 100;
+
+    appData.xp = (appData.xp || 0) + 10;
+
+    saveData();
+    renderGoals();
+    updateHomeStats();
+    showToast("تقدم ممتاز! +10 نقاط 🎯");
+}
+
+function deleteGoal(index) {
+    if (!confirm("تحبي تحذفي الهدف ده؟")) return;
+    appData.goals.splice(index, 1);
+    saveData();
+    renderGoals();
+}
+
+function renderFlashcards() {
+    var container = getElement("flashcardsList");
+    if (!container) return;
+
+    var html = "";
+
+    if (!appData.flashcards || appData.flashcards.length === 0) {
+        html = '<div class="empty-state">اعملي أول بطاقة مذاكرة ليكي 🧠</div>';
+    } else {
+        for (var i = 0; i < appData.flashcards.length; i++) {
+            var card = appData.flashcards[i];
+
+            html += '<div class="flashcard item-card">';
+            html += '<div class="flashcard-front">';
+            html += '<h3>السؤال</h3>';
+            html += '<p>' + escapeHTML(card.question) + '</p>';
+            html += '</div>';
+            html += '<div class="flashcard-answer" id="answer-' + i + '" style="display:none">';
+            html += '<h3>الإجابة</h3>';
+            html += '<p>' + escapeHTML(card.answer) + '</p>';
+            html += '</div>';
+            html += '<div class="item-actions">';
+            html += '<button class="small-button" onclick="showFlashcardAnswer(' + i + ')">إظهار الإجابة</button>';
+            html += '<button class="small-danger" onclick="deleteFlashcard(' + i + ')">حذف</button>';
+            html += '</div>';
+            html += '</div>';
+        }
+    }
+
+    container.innerHTML = html;
+}
+
+function addFlashcard() {
+    var questionInput = getElement("flashcardQuestion");
+    var answerInput = getElement("flashcardAnswer");
+
+    if (!questionInput || questionInput.value.trim() === "") {
+        showToast("اكتبي السؤال 🧠");
+        return;
+    }
+
+    if (!answerInput || answerInput.value.trim() === "") {
+        showToast("اكتبي الإجابة كمان ✍️");
+        return;
+    }
+
+    if (!appData.flashcards) appData.flashcards = [];
+
+    appData.flashcards.push({
+        question: questionInput.value.trim(),
+        answer: answerInput.value.trim()
+    });
+
+    questionInput.value = "";
+    answerInput.value = "";
+
+    saveData();
+    renderFlashcards();
+    showToast("تم حفظ البطاقة 📖");
+}
+
+function showFlashcardAnswer(index) {
+    var answer = getElement("answer-" + index);
+    if (!answer) return;
+
+    if (answer.style.display === "none") {
+        answer.style.display = "block";
+    } else {
+        answer.style.display = "none";
+    }
+}
+
+function deleteFlashcard(index) {
+    if (!confirm("تحبي تحذفي البطاقة دي؟")) return;
+    appData.flashcards.splice(index, 1);
+    saveData();
+    renderFlashcards();
+}
+
+var focusInterval = null;
+var focusSeconds = 25 * 60;
+var focusRunning = false;
+
+function updateFocusDisplay() {
+    var display = getElement("focusTimerDisplay");
+    if (!display) return;
+
+    var minutes = Math.floor(focusSeconds / 60);
+    var seconds = focusSeconds % 60;
+
+    var minuteText = minutes < 10 ? "0" + minutes : String(minutes);
+    var secondText = seconds < 10 ? "0" + seconds : String(seconds);
+
+    display.innerHTML = minuteText + ":" + secondText;
+}
+
+function startFocusTimer() {
+    if (focusRunning) return;
+
+    focusRunning = true;
+
+    focusInterval = setInterval(function() {
+        if (focusSeconds > 0) {
+            focusSeconds--;
+            updateFocusDisplay();
+        } else {
+            clearInterval(focusInterval);
+            focusRunning = false;
+            appData.focusSessions = (appData.focusSessions || 0) + 1;
+            appData.xp = (appData.xp || 0) + 20;
+            saveData();
+            showToast("خلص وقت التركيز! خدي راحة قصيرة ☕");
+        }
+    }, 1000);
+
+    showToast("بدأنا التركيز 📚");
+}
+
+function pauseFocusTimer() {
+    if (focusInterval) {
+        clearInterval(focusInterval);
+        focusInterval = null;
+    }
+
+    focusRunning = false;
+    showToast("تم إيقاف المؤقت مؤقتًا ⏸️");
+}
+
+function resetFocusTimer() {
+    pauseFocusTimer();
+    focusSeconds = 25 * 60;
+    updateFocusDisplay();
+    showToast("رجعنا المؤقت من الأول 🔄");
+}
+
+function setFocusMinutes(minutes) {
+    pauseFocusTimer();
+    focusSeconds = parseInt(minutes, 10) * 60;
+    updateFocusDisplay();
+}
+
+function calculateSimpleExpression(expression) {
+    expression = expression.replace(/,/g, ".").replace(/\s/g, "");
+
+    if (!/^[0-9+\-*/().]+$/.test(expression)) {
+        return "عملية غير صالحة";
+    }
+
+    var numbers = expression.match(/[0-9.]+/g);
+    var operators = expression.match(/[+\-*/]/g);
+
+    if (!numbers || numbers.length === 0) {
+        return "اكتبي عملية صحيحة";
+    }
+
+    var result = parseFloat(numbers[0]);
+
+    if (!operators) {
+        return String(result);
+    }
+
+    for (var i = 0; i < operators.length; i++) {
+        var nextNumber = parseFloat(numbers[i + 1]);
+
+        if (isNaN(nextNumber)) {
+            return "عملية غير مكتملة";
+        }
+
+        if (operators[i] === "+") result += nextNumber;
+        if (operators[i] === "-") result -= nextNumber;
+        if (operators[i] === "*") result *= nextNumber;
+        if (operators[i] === "/") {
+            if (nextNumber === 0) return "مينفعش القسمة على صفر";
+            result /= nextNumber;
+        }
+    }
+
+    return String(result);
+}
+
+function calculateResult() {
+    var input = getElement("calculatorInput");
+    var resultBox = getElement("calculatorResult");
+
+    if (!input || !resultBox) return;
+
+    resultBox.innerHTML = calculateSimpleExpression(input.value);
+}
+
+function clearCalculator() {
+    var input = getElement("calculatorInput");
+    var resultBox = getElement("calculatorResult");
+
+    if (input) input.value = "";
+    if (resultBox) resultBox.innerHTML = "0";
+}
+
+function renderPlanner() {
+    var container = getElement("plannerContent");
+    if (!container) return;
+
+    var today = new Date();
+    var day = today.getDate();
+    var month = today.getMonth() + 1;
+    var year = today.getFullYear();
+
+    container.innerHTML =
+        '<div class="planner-paper">' +
+        '<h3>مخطط اليوم</h3>' +
+        '<p>التاريخ: ' + day + "/" + month + "/" + year + '</p>' +
+        '<div class="planner-lines">' +
+        '<p>☐ أهم مهمة اليوم:</p>' +
+        '<p>☐ وقت للمذاكرة:</p>' +
+        '<p>☐ وقت للراحة:</p>' +
+        '<p>☐ حاجة حلوة أعملها لنفسي:</p>' +
+        '<p>☐ إنجاز أفتخر بيه:</p>' +
+        '</div>' +
+        '</div>';
+}
+
+function chooseAvatar(avatar) {
+    appData.avatar = avatar;
+    saveData();
+    updateProfile();
+    showToast("تم اختيار الشخصية 💗");
+}
+
+function choosePet(pet) {
+    appData.pet = pet;
+    saveData();
+    updateProfile();
+    showToast("الحيوان الأليف اتغير 🐾");
+}
+
+function saveSettings() {
+    var nameInput = getElement("settingsName");
+
+    if (nameInput && nameInput.value.trim() !== "") {
+        appData.userName = nameInput.value.trim();
+    }
+
+    saveData();
+    updateProfile();
+    showToast("تم حفظ الإعدادات ✨");
+}
+
+function exportData() {
+    var dataText = JSON.stringify(appData, null, 2);
+    var blob = new Blob([dataText], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement("a");
+
+    link.href = url;
+    link.download = "Lumi_V4_Backup.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast("تم تجهيز النسخة الاحتياطية 💾");
+}
+
+function importDataFromText(text) {
+    try {
+        var imported = JSON.parse(text);
+
+        if (!imported || typeof imported !== "object") {
+            showToast("الملف غير صالح");
+            return;
+        }
+
+        appData = imported;
+        saveData();
+
+        location.reload();
+    } catch (error) {
+        showToast("حصل خطأ في قراءة الملف");
+    }
+}
+
+function resetAllData() {
+    if (!confirm("متأكدة إنك عايزة تمسحي كل بيانات Lumi؟")) {
+        return;
+    }
+
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+}
+
+function togglePastelTheme() {
+    var body = document.body;
+
+    if (body.className.indexOf("theme-pink") !== -1) {
+        body.className = body.className.replace("theme-pink", "").trim();
+        showToast("رجعنا للثيم الفيكتوري 🤎");
+    } else {
+        body.className += " theme-pink";
+        showToast("اتغير للبيبي بينك 🌸");
+    }
+
+    saveData();
+}
+
+function applySavedTheme() {
+    if (appData.theme === "pink") {
+        document.body.className += " theme-pink";
+    }
+}
+
+function initPartThreeButtons() {
+    var addSubjectButton = getElement("addSubjectButton");
+    var addHabitButton = getElement("addHabitButton");
+    var addGoalButton = getElement("addGoalButton");
+    var addFlashcardButton = getElement("addFlashcardButton");
+
+    if (addSubjectButton) addSubjectButton.onclick = addSubject;
+    if (addHabitButton) addHabitButton.onclick = addHabit;
+    if (addGoalButton) addGoalButton.onclick = addGoal;
+    if (addFlashcardButton) addFlashcardButton.onclick = addFlashcard;
+
+    var startButton = getElement("startFocusButton");
+    var pauseButton = getElement("pauseFocusButton");
+    var resetButton = getElement("resetFocusButton");
+
+    if (startButton) startButton.onclick = startFocusTimer;
+    if (pauseButton) pauseButton.onclick = pauseFocusTimer;
+    if (resetButton) resetButton.onclick = resetFocusTimer;
+
+    var calculateButton = getElement("calculateButton");
+    var clearButton = getElement("clearCalculatorButton");
+
+    if (calculateButton) calculateButton.onclick = calculateResult;
+    if (clearButton) clearButton.onclick = clearCalculator;
+
+    var saveSettingsButton = getElement("saveSettingsButton");
+    var exportButton = getElement("exportDataButton");
+    var resetButtonAll = getElement("resetAllDataButton");
+    var themeButton = getElement("themeButton");
+
+    if (saveSettingsButton) saveSettingsButton.onclick = saveSettings;
+    if (exportButton) exportButton.onclick = exportData;
+    if (resetButtonAll) resetButtonAll.onclick = resetAllData;
+    if (themeButton) themeButton.onclick = togglePastelTheme;
+
+    var plannerButtons = document.querySelectorAll("[data-planner]");
+    for (var i = 0; i < plannerButtons.length; i++) {
+        plannerButtons[i].onclick = renderPlanner;
+    }
+
+    var focus25 = getElement("focus25Button");
+    var focus50 = getElement("focus50Button");
+
+    if (focus25) focus25.onclick = function() {
+        setFocusMinutes(25);
+    };
+
+    if (focus50) focus50.onclick = function() {
+        setFocusMinutes(50);
+    };
+
+    var printButtons = document.querySelectorAll(".print-button");
+    for (var j = 0; j < printButtons.length; j++) {
+        printButtons[j].onclick = function() {
+            window.print();
+        };
+    }
+}
+
+function renderPartThree() {
+    renderSubjects();
+    renderHabits();
+    renderGoals();
+    renderFlashcards();
+    renderPlanner();
+    updateFocusDisplay();
+    applySavedTheme();
+
+    var settingsName = getElement("settingsName");
+    if (settingsName) {
+        settingsName.value = appData.userName || "";
+    }
+}
+
+initPartThreeButtons();
+renderPartThree();
+
+/* =========================================
+   نهاية Lumi V4
+   ========================================= */
+</script>
+</body>
+</html>07:41 م ‎05/‎09/‎2026
